@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="qnaDao">
+
+
+	<!-- <select id="getQnaList" resultType="qnavo" parameterType="cri">
+		<![CDATA[ 
+
+	
+
+	<insert id="insertQna" parameterType="qnavo">
+		INSERT INTO QNA (
+			QNA_TYPE,
+			QNA_TITLE,
+			QNA_CONTENT,
+			USER_ID,
+			QNA_CNT,
+			QNA_TIME,
+			REF,
+			DEPTH,
+			STEP,
+			SECRET,
+			PASSWORD
+		)
+			VALUES(
+				#{qna_type}, 
+				#{qna_title}, 
+				#{qna_content}, 
+				#{user_id}, 
+				0, 
+				now(), 
+				COALESCE((SELECT MAX(ref) FROM QNA),0), 
+				0,
+				0,
+				#{secret}, 
+				#{password})
+	</insert>
+	
+	<select id="getQnaContent" resultType="qnavo" parameterType="int">
+		SELECT * FROM QNA WHERE QNA_NO = #{qna_no}
+	</select>
+	
+	<update id="qnaUpdate" parameterType="qnavo">
+		UPDATE QNA SET 
+		QNA_TYPE = #{qna_type},
+		QNA_TITLE = #{qna_title},
+		QNA_CONTENT = #{qna_content},
+		QNA_CNT = (SELECT MAX(QNA_CNT) FROM QNA WHERE QNA_NO = #{qna_no}),
+		QNA_TIME = (SELECT QNA_TIME FROM QNA WHERE QNA_NO = #{qna_no}),
+		REF = (SELECT REF FROM QNA WHERE QNA_NO = #{qna_no}),
+		DEPTH = (SELECT DEPTH FROM QNA WHERE QNA_NO = #{qna_no}),
+		STEP = (SELECT STEP FROM QNA WHERE QNA_NO = #{qna_no}),
+		SECRET = #{secret},
+		PASSWORD = #{password}
+		WHERE QNA_NO =#{qna_no}
+	</update>
+	
+	<update id="addCnt" parameterType="qnavo">
+		UPDATE QNA SET
+		QNA_CNT = (SELECT MAX(QNA_CNT)+1 FROM QNA WHERE QNA_NO = #{qna_no})
+		WHERE QNA_NO = #{qna_no}
+	</update>
+	
+	
+	<delete id="deleteQna" parameterType="qnavo">
+		DELETE FROM QNA WHERE QNA_NO = #{qna_no}
+	</delete> -->
+	
+	<select id="selectUserInfoForQna" parameterType="int" resultType="userVo">
+		SELECT *
+		FROM USERS 
+		WHERE USER_NO = #{user_no}
+	</select>
+	
+	<insert id="wrtieQnaProc" parameterType="qnavo" >
+		INSERT INTO QNA (
+			QNA_TYPE,
+			QNA_TITLE,
+			QNA_CONTENT,
+			QNA_TIME,
+			PHONE1,
+			PHONE2,
+			PHONE3,
+			USER_NAME,
+			REF,
+			DEPTH,
+			STEP,
+			USER_NO,
+			EMAIL_ID,
+			EMAIL_ADDRESS,
+			REPLY
+		)
+			VALUES(
+				#{qna_type}, 
+				#{qna_title}, 
+				#{qna_content}, 
+				now(),
+				#{phone1}, 
+				#{phone2}, 
+				#{phone3},
+				#{user_name}, 
+				COALESCE((SELECT MAX(ref) FROM QNA)+1,0), 
+				0,
+				0,
+				#{user_no},
+				#{email_id},
+				#{email_address},
+				'N'	
+				)
+	</insert>
+	
+	<select id="getQnaList" parameterType="hashMap" resultType="qnavo">
+		SELECT
+			QNA_NO,
+			QNA_TYPE,
+			QNA_TITLE,
+			QNA_CONTENT,
+			QNA_TIME,
+			REPLY
+		FROM QNA
+		ORDER BY REF DESC, STEP ASC
+		LIMIT #{perPageNum} OFFSET #{startRow}
+	</select>
+	
+	<select id="getCount" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM QNA 
+		WHERE USER_NO = #{user_no}
+	</select>
+	
+	
+	<select id="getContnet" parameterType="int" resultType="qnavo">
+		SELECT 
+			QNA_NO,
+			QNA_TITLE,
+			QNA_CONTENT
+		FROM QNA
+		WHERE QNA_NO = #{qna_no}
+	</select>
+	
+	
+	<delete id="deleteQna" parameterType="int">
+		DELETE FROM QNA
+		WHERE QNA_NO = #{qna_no}
+	</delete>
+	
+	<update id="modifyQna" parameterType="hashMap">
+		UPDATE QNA 
+		SET QNA_TITLE = #{qna_title},
+			QNA_CONTENT = #{qna_content}
+		WHERE QNA_NO = #{qna_no}
+	</update>
+
+</mapper>

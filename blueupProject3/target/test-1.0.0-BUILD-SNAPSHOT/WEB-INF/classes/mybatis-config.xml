@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="db.properties" />
+	<typeAliases>
+		<typeAlias type="blueup.admin.vo.ProductVo" alias="productvo"/>
+		<typeAlias type="blueup.admin.vo.ProductContentVo" alias="productcontentvo"/>
+		<typeAlias type="blueup.admin.vo.AdminCategoryDetailVo" alias="admincategorydetailvo"/>
+		<typeAlias type="blueup.admin.vo.StockVo" alias="stockvo"/>
+		<typeAlias type="blueup.admin.vo.AdminOrderAmountVo" alias="orderamountvo"/>
+		<typeAlias type="blueup.admin.vo.AdminOrderRankVo" alias="orderrankvo"/>
+		<typeAlias type="blueup.user.vo.CartVo" alias="cartvo"/>
+		<typeAlias type="blueup.user.vo.Terms_and_conditionVo" alias="termsvo"/>
+		<typeAlias type="blueup.user.vo.NoticeVo" alias="noticevo"/>
+		<typeAlias type="blueup.user.vo.QnaVo" alias="qnavo"/>
+		<typeAlias type="blueup.user.vo.Category_detailVo" alias="cateDetailvo"/>
+		<typeAlias type="blueup.user.vo.CategoryVo" alias="categoryvo"/>
+		<typeAlias type="blueup.user.paging.Criteria" alias="cri"  />
+		<typeAlias type="blueup.user.vo.WishListVo" alias="wishvo" />
+		<typeAlias type="blueup.user.vo.OrderlistVo" alias="orderlistvo"  />
+		<typeAlias type="blueup.user.vo.OrderVo" alias="ordervo"  />
+		<typeAlias type="blueup.user.vo.UsersVo" alias="userVo"  />
+		<typeAlias type="blueup.user.vo.CartOptionVo" alias="cartoptionvo" />
+		<typeAlias type="blueup.user.vo.CouponVo" alias="couponVo"  />
+		<typeAlias type="blueup.user.vo.PointVo" alias="pointVo"  />
+		<typeAlias type="blueup.user.vo.ProductDetailVo" alias="productDetailvo"  />
+		<typeAlias type="blueup.admin.vo.AdminVo" alias="adminloginvo"  />
+		<typeAlias type="blueup.user.vo.ReviewVo" alias="reviewvo"  />
+		<typeAlias type="blueup.user.vo.BannerVo" alias="bannervo"/>
+		<typeAlias type="blueup.admin.vo.NoticeVo" alias="adminNoticevo"  />
+		<typeAlias type="blueup.admin.vo.Terms_and_conditionVo" alias="adminTermsvo"  />
+		<typeAlias type="blueup.user.vo.PaymentVo" alias="paymentVo"  />
+		<typeAlias type="blueup.user.vo.StockDeduction" alias="stockDeduction"  />
+	</typeAliases>
+	<mappers>
+		<mapper resource="mappings/product-mapping.xml" />
+		<mapper resource="mappings/stock-mapping.xml" />
+		<mapper resource="mappings/cart-mapping.xml" />
+		<mapper resource="mappings/terms-mapping.xml" />			
+		<mapper resource="mappings/notice-mapping.xml" />
+		<mapper resource="mappings/qna-mapping.xml" />
+		<mapper resource="mappings/category-mapping.xml" />
+		<mapper resource="mappings/wish-mapping.xml" />
+		<mapper resource="mappings/orderlist-mapping.xml" />
+		<mapper resource="mappings/order-mapping.xml" />
+		<mapper resource="mappings/userInfo-mapping.xml" />
+		<mapper resource="mappings/cartoption-mapping.xml" />
+		<mapper resource="mappings/loginjoin-mapping.xml"/>
+		<mapper resource="mappings/coupon-mapping.xml" />
+		<mapper resource="mappings/stock-mapping.xml" />
+		<mapper resource="mappings/point-mapping.xml" />
+		<mapper resource="mappings/adminlogin-mapping.xml" />
+		<mapper resource="mappings/review-mapping.xml" />
+		<mapper resource="mappings/product_detail-mapping.xml" />
+		<mapper resource="mappings/adminproductdetail-mapping.xml" />
+		<mapper resource="mappings/admincategorydetail-mapping.xml" />
+		<mapper resource="mappings/admin_Notice_TermsAndCondition-mapping.xml" />
+		<mapper resource="mappings/payment-mapping.xml" />
+		<mapper resource="mappings/adminorder-mapping.xml" />
+	</mappers>
+</configuration>

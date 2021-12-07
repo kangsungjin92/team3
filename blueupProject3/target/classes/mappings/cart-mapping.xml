@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cartDao">
+
+	<insert id="addCart" parameterType="cartvo">
+		INSERT INTO CART(
+			USER_NO,
+			PRODUCT_NO,
+			PRODUCT_NAME,
+			QUANTITY,
+			TOTAL_PRICE,
+			PRODUCT_SIZE,
+			PRODUCT_COLOR
+		) VALUES(
+			#{user_no},
+			#{product_no},
+			#{product_name},
+			#{quantity},
+			#{total_price},
+			#{product_size},
+			#{product_color}
+		)
+	</insert>
+	
+	<!-- 전체 카트 삭제 -->
+	<delete id="deleteAllCart">
+		DELETE FROM CART WHERE USER_NO = CAST(#{user_no}AS INTEGER)
+	</delete>
+	
+	<!-- 선택 카트 삭제 -->
+	<delete id="deleteCart" parameterType="cartvo">
+		DELETE FROM CART WHERE CART_NO IN
+			<foreach collection="list" item="cart_no" open="(" close=")" separator=",">
+				CAST(#{cart_no} AS INTEGER)
+			</foreach> 
+	</delete>
+	
+	<!-- 카트 선택 -->
+	<select id="cartList" resultType="cartvo">
+		SELECT  a.user_no, a.cart_no, a.product_no, a.product_name, a.product_size, a.product_color, a.quantity, 
+		a.total_price, b.delivery_fee, (b.discount * a.quantity) as discount_total, b.discount, b.main_image,
+		SUM(a.total_price) OVER (PARTITION BY user_no) AS all_price,
+		SUM(b.discount * a.quantity) OVER (PARTITION BY user_no) AS all_discount
+		FROM CART AS A JOIN PRODUCT AS B
+		ON a.product_no = b.product_no AND user_no = CAST(#{user_no} AS INTEGER);
+	</select>
+	
+	<!-- 체크된 장바구니 리스트 -->
+	<select id="selectedcartList" resultType="cartvo">
+		SELECT  a.user_no, a.cart_no, a.product_no, a.product_name, a.product_size, a.product_color, a.quantity, 
+		a.total_price, b.delivery_fee, (b.discount * a.quantity) AS discount_total, b.discount, b.main_image,
+		SUM(a.total_price) OVER (PARTITION BY user_no) AS all_price,
+		SUM(b.discount * a.quantity) OVER (PARTITION BY user_no) AS all_discount
+		FROM CART AS A JOIN PRODUCT AS B
+		ON a.product_no = b.product_no
+		WHERE a.cart_no IN
+		 <foreach collection="list" item="cart_no" open="(" close=")" separator=",">
+		  	CAST(#{cart_no} AS INTEGER)
+		 </foreach>
+	</select>
+	
+	<!-- 카트 리스트 조회 -->
+	<select id="selectProductNo" resultType="cartvo">
+		SELECT * FROM CART 
+		WHERE USER_NO = CAST(#{user_no} AS INTEGER)
+	</select>
+	<!-- 카트 수정을 위한 쿼리 -->
+	<update id="updateCartNum" parameterType="cartvo">
+		UPDATE CART   
+		SET
+		QUANTITY = #{quantity},
+		TOTAL_PRICE = #{total_price}
+		WHERE CART_NO = #{cart_no}
+	</update>
+	
+</mapper>

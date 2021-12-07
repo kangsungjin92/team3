@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reviewDao">
+
+	<insert id="insertReview" parameterType="reviewvo" >
+		INSERT INTO REVIEW(
+			PRODUCT_NO,
+			PRODUCT_NAME,
+			USER_NO,
+			PRODUCT_SIZE,
+			STAR,
+			REVIEW_TITLE,
+			REVIEW_CONTENT,
+			USER_ID,
+			REVIEW_TIME,
+			PRODUCT_COLOR
+		) VALUES(
+			#{product_no},
+			#{product_name},
+			#{user_no},
+			#{product_size},
+			#{star},
+			#{review_title},
+			#{review_content},
+			#{user_id},
+			now(),
+			#{product_color}
+		)
+	</insert>
+	
+	<!-- 리뷰 삭제 -->
+	<delete id="deleteReview" parameterType="reviewvo">
+		DELETE FROM REVIEW WHERE REVIEW_NO = #{review_no}
+	</delete>
+	
+
+	
+	<!-- 리뷰를 위한 한가지 상품정보가져오기 -->
+	<select id="getProductInfoForReview" resultType="reviewvo" >
+		SELECT a.user_no,a.order_no,
+	  b.product_no, b.quantity, b.product_name, b.product_size, b.product_color, b.main_image,b.order_status,b.order_detail_no
+		FROM order_request as a right outer JOIN order_detail as b
+		ON a.order_no = b.order_no WHERE order_detail_no=#{order_detail_no};
+		
+	</select>
+	
+	<!-- 리뷰를 위한 사진 가져오기 -->
+	<select id="getReivewPhoto" resultType="reviewvo" >
+	select user_no from order_request and select * from review_photo
+	 where user_no = #{user_no} AND product_no = #{product_no}; 
+	</select>
+	
+	<!-- 작성가능한상품정보가져오기 -->
+	<select id="getReviewproductList" resultType="reviewvo" >
+	    SELECT a.user_no, a.purchaseconfirm, b.product_no, b.quantity, b.product_name, b.product_size, b.product_color, b.main_image, b.review_Status, b.order_detail_no
+		FROM order_request as a JOIN order_detail as b
+		ON a.order_no  = b.order_no and a.purchaseconfirm = 'no' and b.review_status='false'
+		WHERE b.order_status='구매확정' and user_no=#{user_no}
+	</select> 
+	
+	<!-- 작성한 리뷰 가져오기 -->
+	<select id="getReviewList" resultType="reviewvo" >
+	select * from review as a left outer join review_photo as b  on a.review_no = b.review_no where user_no=#{user_no}
+	</select>
+	
+	  <!-- 추가한 리뷰 번호 찾기 -->	
+	 <select id="getReviewNo" resultType="Integer">
+	 select max(review_no) from review
+	 </select>
+
+	 
+	<!-- 포토리뷰 쿼리 -->
+	<insert id="insertPhoto" parameterType="reviewvo" >
+	INSERT INTO review_photo(
+			PRODUCT_NO,
+			PHOTO1,
+			PHOTO2,
+			PHOTO3,
+			PHOTO4,
+			PHOTO5,
+			review_no
+		) VALUES(
+			#{product_no},
+			#{photo1},
+			#{photo2},
+			#{photo3},
+			#{photo4},
+			#{photo5},
+			#{review_no}
+		)
+	
+	
+	</insert>
+	
+	
+	 <!-- SELECT  a.product_name, a.product_size, a.product_color, a.star, a.review_title, a.review_content,
+		a.review_time, 
+	   b.review_photo_no, b.photo1, b.photo2, b.photo3, b.photo4, b.photo5 
+		FROM review as a LEFT OUTER JOIN review_photo as b
+		ON a.review_no = b.review_no 
+		WHERE a.user_no = #{user_no} 
+	 AND a.product_no = b.product_no  -->
+	<!-- 수정을 위한 포토 쿼리 -->
+	<!--  update tableA AS a set
+      addr = b.addr
+      from tableB AS b
+       where
+      a.user_no = b.user_no and a.product_no=b.product_no -->
+
+
+	
+	<!-- 수정을 위한 쿼리 -->
+	<select id="modifyReview" resultType="reviewvo" >
+	 SELECT * FROM REVIEW WHERE REVIEW_NO = #{review_no}
+
+	</select>
+	
+	<!-- 수정폼에서의 수정문 -->
+	<select id="modifyupdateReview" resultType="reviewvo" >
+	 update REVIEW 
+	 set star=#{star},
+	 review_title= #{review_title}, 
+	 review_content=#{review_content},
+	  review_time =now() 
+	 where review_no= #{review_no};
+	</select>
+</mapper>

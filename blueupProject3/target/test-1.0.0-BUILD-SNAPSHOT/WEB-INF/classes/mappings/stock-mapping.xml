@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="stockDao">
+
+<!-- 재고 추가(추가할때만 사용할 것!!! 재고 증감은 밑에 쿼리 있으) -->
+<!-- 다른 옵션의 상품일 경우 다른 재고로 추가할 것!!! -->
+	<insert id="insertStock" parameterType="stockvo">
+		INSERT INTO STOCK (
+			PRODUCT_NO, STOCK_QUANTITY, PRODUCT_SIZE, PRODUCT_COLOR, UNIT_PRICE, PRODUCT_NAME,
+			CATEGORY_NAME, DETAILED_CATEGORY_NAME
+		) VALUES(
+			#{product_no}, 
+			#{stock_quantity}, 
+			#{product_size}, 
+			#{product_color}, 
+			#{unit_price},
+			#{product_name},
+			#{category_name}, 
+			#{detailed_category_name}
+		)
+	</insert>
+	
+	<!--재고 증가를 위한 쿼리  -->
+	<update id="addStock" parameterType="stockvo">
+		UPDATE STOCK
+		SET STOCK_QUANTITY = (select max(STOCK_QUANTITY)+#{addOrDeduct} FROM STOCK) 
+		WHERE STOCK_NO = #{stock_no};
+	</update>
+	
+	<!--재고 차감을 위한 쿼리  -->
+	<update id="deductStock" parameterType="stockvo">
+		UPDATE STOCK
+		SET STOCK_QUANTITY = (select max(STOCK_QUANTITY)-#{addOrDeduct} FROM STOCK) 
+		WHERE STOCK_NO = #{stock_no};
+	</update>
+
+	<!-- 재고 삭제를 위한 쿼리 -->
+	<delete id="deleteStock" parameterType="stockvo">
+		DELETE FROM STOCK WHERE STOCK_NO = #{stock_no}
+	</delete>	
+	
+	<!--검색으로 재고 검색  -->
+	<select id="getStockListBySearch" parameterType="stockvo" resultType="stockvo">
+		SELECT * FROM STOCK WHERE PRODUCT_NAME LIKE '%'||#{searchKeyword}||'%' ORDER BY STOCK_NO
+	</select>
+	
+	<!--전체 재고 검색  -->
+	<select id="getStockList" parameterType="stockvo" resultType="stockvo">
+		SELECT * FROM STOCK ORDER BY STOCK_NO DESC;
+	</select>
+	
+	<!-- 상품번호&상품컬러 검색 -->
+	<select id="getStockbyProductno" parameterType="stockvo" resultType="stockvo">
+		SELECT stock_quantity, product_size FROM STOCK WHERE PRODUCT_NO = #{product_no} AND PRODUCT_COLOR = #{product_color}
+	</select>
+
+	<!-- 카테고리로 검색 -->
+	<select id="getStockListbyCategory" parameterType="stockvo" resultType="stockvo">
+		SELECT * FROM STOCK WHERE CATEGORY_NAME LIKE '%'||#{category_name}||'%'
+	</select>
+	
+	<!-- 카테고리 및 세부 카테고리로 검색 -->
+	<select id="getStockListByDetailedCategory" parameterType="stockvo" resultType="stockvo">
+		SELECT * FROM STOCK 
+		WHERE CATEGORY_NAME LIKE '%'||#{category_name}||'%' 
+		AND DETAILED_CATEGORY_NAME LIKE '%'||#{detailed_category_name}||'%'
+	</select>
+	
+	<!-- 재고 중복 여부 체크-->
+	<select id="checkStock" parameterType="stockvo" resultType="Integer">
+		select count(*) from stock 
+		where product_no = #{product_no} and product_size = #{product_size} and unit_price = #{unit_price} and product_color = #{product_color};
+	</select>
+
+	<!-- 특정 재고 정보 가져오기 -->
+	<select id="getStockInfo" parameterType="Integer" resultType="stockvo">
+		select * from stock where stock_no=#{stock_no}
+	</select>
+	
+	<!-- 재고 수정 -->
+	<update id="updateStock" parameterType="stockvo" >
+		update stock set stock_quantity=#{stock_quantity} where stock_no=#{stock_no};
+	</update>
+</mapper>
