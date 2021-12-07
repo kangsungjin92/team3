@@ -23,5 +23,9 @@ public class AdminCategoryDetailController {
 		List<AdminCategoryDetailVo> category = new ArrayList<AdminCategoryDetailVo>();
 		category = admincategorydetailserviceimpl.getCategoryDetail(category_name);
 		return category;
+		
+		
+		
+		
 	}
 }
