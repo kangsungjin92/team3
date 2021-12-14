@@ -43,45 +43,55 @@ public class ReviewController {
 
 	// 작성가능한 리뷰 상품 정보 호출
 	@RequestMapping("/getReviewproductList.do")
-	public ModelAndView getReviewproductList(HttpSession session, ReviewVo vo, ModelAndView mav) {
-		System.out.println("작성가능한 리뷰 상품정보 출력");
+	public ModelAndView getReviewproductList(ReviewVo vo) {
+		ModelAndView mav = new ModelAndView();
+		System.out.println("리뷰정보 가져오기");
 		List<ReviewVo> test = (List<ReviewVo>) reviewService.getReviewproductList(vo);
 		if(test.size() == 0) {
 			mav.addObject("emptyReviewproduct", "없음");
 		}else {
 			mav.addObject("getReviewproductList", reviewService.getReviewproductList(vo));
-			System.out.println(test.get(0).getProduct_no());
 		}
 		mav.setViewName("reviewView");
 		
 		return mav;
 	}
-
-	// 내가 작성한 리뷰 리스트 호출
 	
-	@RequestMapping("/getReviewList.do")
-	public ModelAndView getReviewList(@RequestParam(value = "user_no") int user_no) {
-		System.out.println("test");
+	@RequestMapping("/getReviewList1.do")
+	@ResponseBody
+	public ModelAndView getReviewList1(@RequestParam(value="user_no") String user_no) {
 		ReviewVo vo = new ReviewVo();
 		ModelAndView mav = new ModelAndView();
-		vo.setUser_no(user_no);
-		System.out.println(user_no);
-		System.out.println("내가 작성한 리뷰 리스트 출력");
-		List<ReviewVo> t = reviewService.getReviewList(vo);
-		for (ReviewVo m : t) {
-			System.out.println(m);
-			
+		vo.setUser_no(Integer.parseInt(user_no));
+		System.out.println("리뷰정보 가져오기");
+		System.out.println(vo.getUser_no());
+		List<ReviewVo> test = (List<ReviewVo>) reviewService.getReviewproductList(vo);
+		if(test.size() == 0) {
+			mav.addObject("emptyReviewproduct", "없음");
+		}else {
+			mav.addObject("getReviewproductList", reviewService.getReviewproductList(vo));
 		}
+		mav.setViewName("mypageReviewhtml");
+		return mav;
+	}
+
+	// 내가 작성한 리뷰 리스트 호출
+	@RequestMapping("/getReviewList2.do")
+	@ResponseBody
+	public ModelAndView getReviewList2(@RequestParam(value="user_no") String user_no) {
+		ReviewVo vo = new ReviewVo();
+		ModelAndView mav = new ModelAndView();
+		vo.setUser_no(Integer.parseInt(user_no));
+		System.out.println("내가 작성한 리뷰 리스트 출력");
+		System.out.println(vo.getUser_no());
 		List<ReviewVo> test = (List<ReviewVo>) reviewService.getReviewList(vo);
 		if(test.size() == 0) {
 				mav.addObject("emptyReview", "없음");
 		}else {
 			mav.addObject("getReviewList", reviewService.getReviewList(vo));
 		}
-			mav.setViewName("reviewView");
-			
+			mav.setViewName("writtenReview");
 			return mav;
-			
 		}
 
 	
