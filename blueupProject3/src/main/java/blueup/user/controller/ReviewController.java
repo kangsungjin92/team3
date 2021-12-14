@@ -74,9 +74,7 @@ public class ReviewController {
 		}
 		List<ReviewVo> test = (List<ReviewVo>) reviewService.getReviewList(vo);
 		if(test.size() == 0) {
-			
 				mav.addObject("emptyReview", "없음");
-				
 		}else {
 			mav.addObject("getReviewList", reviewService.getReviewList(vo));
 		}
@@ -90,7 +88,8 @@ public class ReviewController {
 	// 리뷰 등록
 	@RequestMapping("/insertReview.do")
 	@ResponseBody
-	public ModelAndView insertReview(ReviewVo vo, @RequestParam(value="product_no") String product_no) {
+	public ModelAndView insertReview(ReviewVo vo, @RequestParam(value="product_no") String product_no, 
+			@RequestParam(value="order_detail_no") int order_detail_no) {
 
 		ModelAndView mav = new ModelAndView();
 		List<MultipartFile> file = vo.getReviewImage();
@@ -107,8 +106,7 @@ public class ReviewController {
 		}
 		
 		/* 리뷰 status update*/
-		
-		
+		reviewService.updateStatus(order_detail_no);
 		
 		/* 포토 테이블에 넣을 쿼리 + 파라미터는 REVIEWVO로 받아야함*/
 		mav.addObject("getReviewList", reviewService.getReviewList(vo));
