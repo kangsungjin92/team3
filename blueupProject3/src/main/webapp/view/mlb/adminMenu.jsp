@@ -7,37 +7,43 @@
     	<hr class="hr-ddd" />
     	
     	<ul class="nav-mnlist">
+    		<li id="myNavi0">
+    			<a href="javascript:;"><span>회원 관리</span></a>
+    			<ul>
+    				<li>
+    					<a href="/test/getUserList.mdo"><span>회원 관리</span></a>
+    				</li>
+    			</ul>
+    		</li>
     		<li id="myNavi1">
     			<a href="javascript:;"><span>사이트 관리</span></a>
     			<ul>
     				<li>
     					<a href="#"><span>공지사항/약관 관리</span></a>
     				</li>
-    				<!-- 
     				<li>
     					<a href="#"><span>문의 관리</span></a>
     				</li>
     				<li>
     					<a href="#"><span>쿠폰 관리</span></a>
     				</li>
-    				<!-- <li>
+    				<li>
     					<a href="#"><span>배너 관리</span></a>
     				</li>
     				<li>
     					<a href="#"><span>카테고리 관리</span></a>
-    				</li> -->
+    				</li>
     			</ul>
     		</li>
     		<li id="myNavi2">
     			<a href="javascript:;"><span>주문 관리</span></a>
     			<ul>
     				<li>
-    					<a href="/test/getChartForm.mdo?start='2021-11-01'&end='2021-11-31'"><span>통계내역</span></a>
+    					<a href="/test/getChartForm.mdo?start='2021-12-01'&end='2021-12-31'"><span>통계내역</span></a>
     				</li>
-    				<!--  
     				<li>
     					<a href="#"><span>일일주문내역</span></a>
-    				</li>-->
+    				</li>
     				<li>
     					<a href="/test/getOrderManagement.mdo"><span>배송/주문 관리</span></a>
     				</li>
@@ -49,7 +55,6 @@
     				<li>
     					<a href="/test/getProductList.mdo"><span>상품조회</span></a>
     				</li>
-    				<!-- 
     				<li>
     					<a href="#"><span>결제 상품 목록</span></a>
     				</li>
@@ -59,24 +64,10 @@
     				<li>
     					<a href="#"><span>취소 관리</span></a>
     				</li>
-    				 -->
     				<li>
     					<a href="/test/getStockList.mdo"><span>재고 관리</span></a>
     				</li>
     			</ul>
     		</li>
- 		<!--  
-    		<li id="myNavi4">
-    			<a href="javascript:;"><span>정산관리</span></a>
-    			<ul>
-    				<li>
-    					<a href="#"><span>정산예정내역</span></a>
-    				</li>
-    				<li>
-    					<a href="#"><span>정산 통계</span></a>
-    				</li>
-    			</ul>
-    		</li>
-    		-->
     	</ul>
     	</nav>

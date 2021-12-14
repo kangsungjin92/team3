@@ -11,6 +11,7 @@
 		<typeAlias type="blueup.admin.vo.StockVo" alias="stockvo"/>
 		<typeAlias type="blueup.admin.vo.AdminOrderAmountVo" alias="orderamountvo"/>
 		<typeAlias type="blueup.admin.vo.AdminOrderRankVo" alias="orderrankvo"/>
+		<typeAlias type="blueup.admin.vo.AdminUsersVo" alias="adminuservo"/>
 		<typeAlias type="blueup.user.vo.CartVo" alias="cartvo"/>
 		<typeAlias type="blueup.user.vo.Terms_and_conditionVo" alias="termsvo"/>
 		<typeAlias type="blueup.user.vo.NoticeVo" alias="noticevo"/>
@@ -59,5 +60,6 @@
 		<mapper resource="mappings/admin_Notice_TermsAndCondition-mapping.xml" />
 		<mapper resource="mappings/payment-mapping.xml" />
 		<mapper resource="mappings/adminorder-mapping.xml" />
+		<mapper resource="mappings/adminusers-mapping.xml" />
 	</mappers>
 </configuration>
