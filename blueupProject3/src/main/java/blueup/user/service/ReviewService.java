@@ -2,6 +2,7 @@ package blueup.user.service;
 
 import java.util.List;
 
+import blueup.user.vo.OrderlistVo;
 import blueup.user.vo.ReviewVo;
 
 public interface ReviewService {
@@ -15,5 +16,6 @@ public interface ReviewService {
 		public int modifyupdateReview(ReviewVo vo);
 		public int getReviewNo();
 		public int insertPhoto(ReviewVo vo);
-		}
+		public int updateStatus(int order_detail_vo);
+	}
 		

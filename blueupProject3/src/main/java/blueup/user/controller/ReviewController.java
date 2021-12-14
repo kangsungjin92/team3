@@ -34,6 +34,7 @@ public class ReviewController {
 		System.out.println(vo.getOrder_detail_no());
 		System.out.println(vo.getUser_no());
 		ReviewVo reviewWrite = reviewService.getProductInfoForReview(vo);
+		System.out.println(reviewWrite.getProduct_no());
 		System.out.println("리뷰정보출력");
 		mav.addObject("getProductInfoForReview", reviewWrite);
 		mav.setViewName("reviewWrite");
@@ -42,8 +43,9 @@ public class ReviewController {
 
 	// 작성가능한 리뷰 상품 정보 호출
 	@RequestMapping("/getReviewproductList.do")
-	public ModelAndView getReviewproductList(HttpSession session, ReviewVo vo, ModelAndView mav) {
-		System.out.println("작성가능한 리뷰 상품정보 출력");
+	public ModelAndView getReviewproductList(ReviewVo vo) {
+		ModelAndView mav = new ModelAndView();
+		System.out.println("리뷰정보 가져오기");
 		List<ReviewVo> test = (List<ReviewVo>) reviewService.getReviewproductList(vo);
 		if(test.size() == 0) {
 			mav.addObject("emptyReviewproduct", "없음");
@@ -54,49 +56,57 @@ public class ReviewController {
 		
 		return mav;
 	}
-
-	// 내가 작성한 리뷰 리스트 호출
 	
-	@RequestMapping("/getReviewList.do")
-	public ModelAndView getReviewList(@RequestParam(value = "user_no") int user_no) {
-		System.out.println("test");
+	@RequestMapping("/getReviewList1.do")
+	@ResponseBody
+	public ModelAndView getReviewList1(@RequestParam(value="user_no") String user_no) {
 		ReviewVo vo = new ReviewVo();
 		ModelAndView mav = new ModelAndView();
-		vo.setUser_no(user_no);
-		System.out.println(user_no);
-		System.out.println("내가 작성한 리뷰 리스트 출력");
-		List<ReviewVo> t = reviewService.getReviewList(vo);
-		for (ReviewVo m : t) {
-			System.out.println(m);
-			
+		vo.setUser_no(Integer.parseInt(user_no));
+		System.out.println("리뷰정보 가져오기");
+		System.out.println(vo.getUser_no());
+		List<ReviewVo> test = (List<ReviewVo>) reviewService.getReviewproductList(vo);
+		if(test.size() == 0) {
+			mav.addObject("emptyReviewproduct", "없음");
+		}else {
+			mav.addObject("getReviewproductList", reviewService.getReviewproductList(vo));
 		}
+		mav.setViewName("mypageReviewhtml");
+		return mav;
+	}
+
+	// 내가 작성한 리뷰 리스트 호출
+	@RequestMapping("/getReviewList2.do")
+	@ResponseBody
+	public ModelAndView getReviewList2(@RequestParam(value="user_no") String user_no) {
+		ReviewVo vo = new ReviewVo();
+		ModelAndView mav = new ModelAndView();
+		vo.setUser_no(Integer.parseInt(user_no));
+		System.out.println("내가 작성한 리뷰 리스트 출력");
+		System.out.println(vo.getUser_no());
 		List<ReviewVo> test = (List<ReviewVo>) reviewService.getReviewList(vo);
 		if(test.size() == 0) {
-			
 				mav.addObject("emptyReview", "없음");
-				
 		}else {
 			mav.addObject("getReviewList", reviewService.getReviewList(vo));
 		}
-			mav.setViewName("reviewView");
-			
+			mav.setViewName("writtenReview");
 			return mav;
-			
 		}
 
 	
 	// 리뷰 등록
-	
 	@RequestMapping("/insertReview.do")
 	@ResponseBody
-	public ModelAndView insertReview(ReviewVo vo, @RequestParam(value="product_no") String product_no) {
+	public ModelAndView insertReview(ReviewVo vo, @RequestParam(value="product_no") String product_no, 
+			@RequestParam(value="order_detail_no") int order_detail_no) {
 
 		ModelAndView mav = new ModelAndView();
 		List<MultipartFile> file = vo.getReviewImage();
-		vo.setProduct_no(Integer.parseInt(product_no));
+		vo.setOrder_detail_no(Integer.parseInt(product_no));
 		ReviewVo rvo = insertPhoto(file, vo);
 		
-		vo.setReview_status(true);
+		/* 리뷰 insert*/
 		int result = reviewService.insertReview(rvo);
 		if(result==1) {
 			int review_no = reviewService.getReviewNo();
@@ -104,6 +114,9 @@ public class ReviewController {
 			int result3 = reviewService.insertPhoto(rvo);
 			System.out.println("insert개수" + result3);
 		}
+		
+		/* 리뷰 status update*/
+		reviewService.updateStatus(order_detail_no);
 		
 		/* 포토 테이블에 넣을 쿼리 + 파라미터는 REVIEWVO로 받아야함*/
 		mav.addObject("getReviewList", reviewService.getReviewList(vo));

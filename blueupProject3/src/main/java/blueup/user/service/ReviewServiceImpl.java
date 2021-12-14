@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import blueup.user.dao.ReviewDAO;
+import blueup.user.vo.OrderlistVo;
 import blueup.user.vo.QnaVo;
 import blueup.user.vo.ReviewVo;
 
@@ -61,6 +62,11 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public int insertPhoto(ReviewVo vo) {
 		return reviewDAO.insertPhoto(vo);
+	}
+
+	@Override
+	public int updateStatus(int order_detail_vo) {
+		return reviewDAO.updateStatus(order_detail_vo);
 	}
 
 

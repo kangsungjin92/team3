@@ -4,32 +4,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!-- 컨텐츠 시작 -->
 <script type="text/javascript" src="https://static.mlb-korea.com/pc/static/js/jquery.form.js"></script>
-<script type="text/javascript"
-	src="https://static.mlb-korea.com/pc/static/js/order/order.util.js?v=prod-version-858_20211102145956"></script>
-<script type="text/javascript"
-	src="https://static.mlb-korea.com/pc/static/js/order/cart.js?v=prod-version-858_20211102145956"></script>
-<script type="text/javascript"
-	src="//script.about.co.kr/templates/script/cm/adbay.cart.controller.js"></script>
+<script type="text/javascript" src="https://static.mlb-korea.com/pc/static/js/order/order.util.js?v=prod-version-858_20211102145956"></script>
+<script type="text/javascript" src="https://static.mlb-korea.com/pc/static/js/order/cart.js?v=prod-version-858_20211102145956"></script>
+<script type="text/javascript" src="//script.about.co.kr/templates/script/cm/adbay.cart.controller.js"></script>
+<script type="text/javascript" src="/javascript/message/cart_ko.js?v=prod-version-858_20211102145956"></script>
 
-<script type="text/javascript"
-	src="/javascript/message/cart_ko.js?v=prod-version-858_20211102145956"></script>
-
-<div id="adbay_cart" style="display: none;"></div>
-<style>
-/* 버튼css */
-.button {
-	background-color: black;
-	border: none;
-	color: white;
-	padding: 10px 60px; /* 높이와 길이 */
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 12px;
-	margin: 4px 2px;
-	cursor: pointer;
-}
-</style>
 <!-- 컨텐츠 시작 -->
 <div class="contain od list" id="contain">
 	<div class="container">
@@ -42,110 +21,62 @@
 			</div>
 		</div>
 		<br>
-		<div class="board-write">
 		<form id="addReview" action="/test/insertReview.do" method="POST" enctype="multipart/form-data">
-			<table summary="약관 입력">
-				<caption>QnA</caption>
-				<colgroup>
-					<col style="width: 200px;">
-					<col>
-				</colgroup>
+		<div class="board-write">
+			<table summary="리뷰 입력">
 				<tbody>
-				<tr><th scope="row">
-				<label for="boardWriteTitle">상품정보</label>
-				<div></div>
-				
-				<img src="${getProductInfoForReview.main_image}" id="product_img" width="150px" height="150px" >
-				<td width="100px"><input value="${getProductInfoForReview.product_name}" name="product_name" id="product_name"></td>
-				<td width="60px"><input value="${getProductInfoForReview.quantity}" name="quantity" id="quantity"></td>
-				<td width="100px">  <input value="${getProductInfoForReview.product_color}" name="product_color" id="product_color"></td>
-				<td width="100px"><input value="${getProductInfoForReview.product_size}" name="product_size" id="product_size"></td>
-				<input type="hidden" id="review_no" class="review_no" value="${getProductInfoForReview.review_no}" name="review_no" />
-				<input type="hidden" id="user_no" class="user_no" value="${getProductInfoForReview.user_no}" name="user_no" />
-				 </th>
-				 <%-- 나중에  src="${REVIEW_PHOTO.photo1}"등으로 고쳐야 a함 --%>
-				</tr>
-				<tr></tr><tr></tr><tr></tr>
-					 <tr>
-					 
-						<th scope="row"><label for="boardWriteTitle">제목</label> <span
-							class="required">*</span></th>
-						<td><input type="text" id="boardWriteTitle"
-							class="input-style01" name="review_title"
-							placeholder="30자 미만으로 입력해 주세요." style="width: 515px;"/> 
-						</td></tr> 
-						<tr><th scope="row"><label for="boardWriteTitle">아이디</label> <span
-							class="required">*</span></th>
-						<td><input type="text" id="user_id"
-							class="input-style01" name="user_id"
-							placeholder="아이디를 입력해 주세요." style="width: 300px;"/> 
-							
-							
-						</td>
-					</tr>
-					
-					<tr>
-					
-						<th scope="row"><label for="boardWriteTitle">별점</label> </th>
-						<td><input type="text" id="star"
-							class="input-style01" name="star"
-							placeholder="별점" style="width: 100px;" >점 
-							<span
-							class="error-msg" id="boardWriteTitle-msg" style="display: none;"></span>
-						</td>
-					</tr>
-					<%-- <tr>
-					
-						<th scope="row"><label for="boardWriteTitle">작성시간</label> </th>
-						<td><input type="text" id="review_time" placeholder="20XX-XX-XX"
-							class="input-style01" name="csoMtmInq.inqSj"
-							 style="width: 100px;" value="${insertReview.review_time}"> 
-							<span
-							class="error-msg" id="boardWriteTitle-msg" style="display: none;"></span>
-						</td>
-					</tr> --%>
-						<th scope="row"><label for="boardWriteContent">내용</label> <span
-							class="required">*</span></th>
-						<td><textarea cols="30" rows="10" id="content" name="review_content"
-								placeholder="1,000자 미만 (특수문자 \ / : < > ; 사용불가)으로 입력해 주세요."
-								style="width: 1000px; height: 150px;" ></textarea>
-							<div class="clearfix">
-								
-								<div class="fr">
-									<span class="txt13-999"><em class="txt13-000"
-										id="counter">0</em>자/1,000자</span>
-										
-								</div>
-								
-								
-								<%-- <!-- 히든으로 뺀거 -->
-								<input type="hidden" id="product_name" value="${getProductInfoForReview.product_name}"/>
-								<input type="hidden" id="product_color" value="${getProductInfoForReview.product_color}"/>
-								<input type="hidden" id="product_size" value="${getProductInfoForReview.product_size}"/>
-								<input type="hidden" id="product_img" value="${getProductInfoForReview.product_img}"/> --%>
-								<!-- <div >
-									<input class="input_ea" type="file">
-								</div> -->
-							
-									<tr>
-									<th scope="row"><label for="boardWriteTitle">리뷰 사진</label>
-									<td>
-									<span>
+						<tr>
+							<th scope="row" style="vertical-align:middle;"><label for="boardWriteTitle">상품정보</label> 
+							<span class="required">*</span>
+							</th>
+							<td style="text-align:center;"><img src="${getProductInfoForReview.main_image}" id="product_img" width="150px" height="150px"></td>
+							<td><input value="${getProductInfoForReview.product_name}" name="product_name" id="product_name" style="width:270px; border:none;"></td>
+							<td>옵션&nbsp;:&nbsp;<input value="${getProductInfoForReview.quantity}" name="quantity" id="quantity" style="width:50px; border:none; text-align:center;">
+								&nbsp;/&nbsp;<input value="${getProductInfoForReview.product_color}" name="product_color" id="product_color" style="width:50px; border:none; text-align:center;">
+								&nbsp;/&nbsp;<input value="${getProductInfoForReview.product_size}" name="product_size" id="product_size" style="width:50px; border:none; text-align:center;">
+							</td>
+						</tr> 
+					 	<tr>
+							<th scope="row"><label for="boardWriteTitle">제목</label> 
+							<span class="required">*</span>
+							</th>
+							<td><input type="text" id="boardWriteTitle" class="input-style01" name="review_title" placeholder="30자 미만으로 입력해 주세요." style="width: 515px;"/> 
+							</td>
+						</tr> 
+						<tr>
+							<th scope="row"><label for="boardWriteTitle">아이디</label> 
+							<span class="required">*</span>
+							</th>
+							<td><input type="text" id="user_id" class="input-style01" name="user_id" placeholder="아이디를 입력해 주세요." style="width: 300px;"/> 
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><label for="boardWriteTitle">별점</label>
+							</th>
+							<td><input type="text" id="star" class="input-style01" name="star" placeholder="별점" style="width: 100px;" >점 
+							<span class="error-msg" id="boardWriteTitle-msg" style="display: none;"></span>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><label for="boardWriteContent">내용</label>
+							<span class="required">*</span>
+							</th>
+							<td><textarea cols="30" rows="10" id="content" name="review_content" 
+								placeholder="1,000자 미만 (특수문자 \ / : < > ; 사용불가)으로 입력해 주세요." style="width: 1000px; height: 150px;" ></textarea>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><label for="boardWriteTitle">리뷰 사진</label></th>
+							<td>
+								<span>
 									<input type="file"  name="reviewImage[0]">
 									<input type="file"  name="reviewImage[1]">
 									<input type="file"  name="reviewImage[2]">
 									<input type="file"  name="reviewImage[3]">
 									<input type="file"  name="reviewImage[4]">
-									</span>
-									</td>
-									</tr>
-									
-									
-									
-									
-							</div></td>
-					</tr>
-					 
+								</span>
+							</td>
+						</tr>
 				</tbody>
 			</table>
 		</div>
@@ -155,13 +86,14 @@
 			<!--  <a href="#" id="regBtn" class="btn fill btn-style02">저장</a> -->
 			<input type="button" class="button" onclick="getProductInfo()" value="취소"/>
 			<input type="submit" class="button" id="submitBtn" value="저장"/>
-			<input type="hidden" id="product_no" class="product_no" name="product_no" value="${getReviewproductList.product_no}"/> 
+			<input type="hidden" id="product_no" class="product_no" name="product_no" value="${getProductInfoForReview.product_no}"/> 
 			<input type="hidden" class="order_no" id='order_no' value="${getReviewproductList.order_no}"/>
-		
+			<input type="hidden" id="order_detail_no" class="order_detail_no" name="order_detail_no" value="${getProductInfoForReview.order_detail_no}"/> 
 			<!-- 저장 시 디비 insert -->
 		</div>
-			</form>
+		</form>
 		<br>
+		
 <script type="text/javascript">
 function getProductInfo(){
 	var user_no = localStorage.getItem("user_no");
@@ -169,16 +101,10 @@ function getProductInfo(){
 	
 }
 
-
-       
-
-
 $(document).ready(function(){
     //저장 버튼 클릭 시
     $("#addReview").submit(function(){
-    	 var order_detai_no = 25;
-    	 var user_no = localStorage.getItem("user_no");
-    	 var product_no = 101001;
+    	var user_no = localStorage.getItem("user_no");
     		if($('#boardWriteTitle').val() == ""){
     			alert("제목을 입력해주세요");
     			return false;
@@ -218,11 +144,21 @@ $(document).ready(function(){
     		
     });
 });
-
-
-	
-	
 </script>
-		<%@ include file="/footer.jsp"%>
-		</body>
-		</html>
+
+<style type="text/css">
+/* 버튼css */
+.button {
+	background-color: black;
+	border: none;
+	color: white;
+	padding: 10px 60px; /* 높이와 길이 */
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 12px;
+	margin: 4px 2px;
+	cursor: pointer;
+}
+</style>
+<%@ include file="/footer.jsp"%>

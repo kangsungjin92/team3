@@ -31,7 +31,7 @@
 			b.quantity, b.order_status, b.review_status,
 			b.phone1, b.phone2, b.phone3,
 			b.discount_rate, b.cancel_date, b.refund_means,
-			b.refund_bank, b.refund_account, b.refund_price
+			b.refund_bank, b.refund_account, b.refund_price, b.order_detail_no
 		
 		FROM order_request as a right outer join order_detail as b
 		ON a.order_no = b.order_no
