@@ -34,6 +34,7 @@ public class ReviewController {
 		System.out.println(vo.getOrder_detail_no());
 		System.out.println(vo.getUser_no());
 		ReviewVo reviewWrite = reviewService.getProductInfoForReview(vo);
+		System.out.println(reviewWrite.getProduct_no());
 		System.out.println("리뷰정보출력");
 		mav.addObject("getProductInfoForReview", reviewWrite);
 		mav.setViewName("reviewWrite");
@@ -49,6 +50,7 @@ public class ReviewController {
 			mav.addObject("emptyReviewproduct", "없음");
 		}else {
 			mav.addObject("getReviewproductList", reviewService.getReviewproductList(vo));
+			System.out.println(test.get(0).getProduct_no());
 		}
 		mav.setViewName("reviewView");
 		
@@ -86,17 +88,16 @@ public class ReviewController {
 
 	
 	// 리뷰 등록
-	
 	@RequestMapping("/insertReview.do")
 	@ResponseBody
 	public ModelAndView insertReview(ReviewVo vo, @RequestParam(value="product_no") String product_no) {
 
 		ModelAndView mav = new ModelAndView();
 		List<MultipartFile> file = vo.getReviewImage();
-		vo.setProduct_no(Integer.parseInt(product_no));
+		vo.setOrder_detail_no(Integer.parseInt(product_no));
 		ReviewVo rvo = insertPhoto(file, vo);
 		
-		vo.setReview_status(true);
+		/* 리뷰 insert*/
 		int result = reviewService.insertReview(rvo);
 		if(result==1) {
 			int review_no = reviewService.getReviewNo();
@@ -104,6 +105,10 @@ public class ReviewController {
 			int result3 = reviewService.insertPhoto(rvo);
 			System.out.println("insert개수" + result3);
 		}
+		
+		/* 리뷰 status update*/
+		
+		
 		
 		/* 포토 테이블에 넣을 쿼리 + 파라미터는 REVIEWVO로 받아야함*/
 		mav.addObject("getReviewList", reviewService.getReviewList(vo));
