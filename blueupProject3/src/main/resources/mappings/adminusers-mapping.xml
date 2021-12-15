@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="adminuserDAO">
+	<select id="adminuserList" resultType="adminuservo">
+		SELECT user_no, user_id, phone1, phone2, phone3, user_registration_time, agree_sns,
+		user_name, mobile_carrier, user_gender, block 
+		FROM users 
+		WHERE agree_sns=true
+	</select>
+</mapper>
