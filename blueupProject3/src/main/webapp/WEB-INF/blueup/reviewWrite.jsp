@@ -89,6 +89,7 @@
 			<input type="hidden" id="product_no" class="product_no" name="product_no" value="${getProductInfoForReview.product_no}"/> 
 			<input type="hidden" class="order_no" id='order_no' value="${getReviewproductList.order_no}"/>
 			<input type="hidden" id="order_detail_no" class="order_detail_no" name="order_detail_no" value="${getProductInfoForReview.order_detail_no}"/> 
+			<input type="hidden" id="user_no" name="user_no" value="${getProductInfoForReview.user_no}"/> 
 			<!-- 저장 시 디비 insert -->
 		</div>
 		</form>
@@ -104,7 +105,6 @@ function getProductInfo(){
 $(document).ready(function(){
     //저장 버튼 클릭 시
     $("#addReview").submit(function(){
-    	var user_no = localStorage.getItem("user_no");
     		if($('#boardWriteTitle').val() == ""){
     			alert("제목을 입력해주세요");
     			return false;

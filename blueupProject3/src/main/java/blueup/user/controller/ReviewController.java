@@ -128,7 +128,6 @@ public class ReviewController {
 	
 	//리뷰 사진 업로드 및 경로 리턴
 	public ReviewVo insertPhoto(List<MultipartFile> imageList, ReviewVo vo ) {
-		
 		String uploadFolder = "https://blueup.s3.ap-northeast-2.amazonaws.com/";
 		List<String> tmp = new ArrayList<String>();
 		try {
@@ -168,37 +167,6 @@ public class ReviewController {
 	}
 	
 	
-	
-	
-	
-	//@RequestMapping("/insertReview.do")
-	//@ResponseBody
-	//public int insertReview(
-
-		//	int order_no, /* int product_no, */ /* ReviewVo, vo.set 다시 int로 */
-		//	String star, String title, String content, String user_id, String product_name, String product_size,
-		//	Date review_time, String product_color, Boolean review_status, int user_no) {
-	//	System.out.println(1);
-	//	ModelAndView mav = new ModelAndView();
-	//	ReviewVo vo = new ReviewVo();
-	//	vo.setProduct_name(product_name);
-	//	vo.setProduct_size(product_size);
-	//	System.out.println(5);
-	//	vo.setStar(Integer.parseInt(star));
-	//	vo.setReview_title(title);
-	//		vo.setReview_content(content);
-	//	vo.setUser_id(user_id);
-	//	vo.setReview_time(review_time);
-	//	vo.setProduct_color(product_color);
-	//	vo.setUser_no(user_no);
-	//	vo.setOrder_no(order_no);
-	//	/* vo.setProduct_no(product_no); */
-	//	vo.setReview_status(true);
-	//	int result = reviewService.insertReview(vo);
-	//	return result;
-
-	//}
-	
 	// 리뷰 삭제
 	@RequestMapping("/deleteReview.do")
 	@ResponseBody
@@ -206,16 +174,11 @@ public class ReviewController {
 	public int deleteReview(HttpSession session, ReviewVo vo, String user_no) {
 		System.out.println("리뷰가 삭제되었습니다");
 		vo.setUser_no(Integer.parseInt(user_no));
-		/* reviewService.deleteReview(vo); */
-		/*->삭제를 하고 또 삭제를 해서*/
-		/*
-		 * user_no을 넣어서 넘겨야함 넘길 때 redirect로 넘기게되면 정보 사라짐 session에 저장해서 넘겨야 할듯 뿌잉 고생하는
-		 * 숭민이 >< ㅎㅎㅎㅎㅎ
-		 */
 		int result = reviewService.deleteReview(vo);
 		System.out.println(result);
 		return result;
 	}
+	
 //수정하는 폼
 	@RequestMapping("/modifyReview.do")
 	public ModelAndView modifyReview(HttpSession session, ReviewVo vo) {

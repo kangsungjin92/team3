@@ -43,7 +43,7 @@
 											작성시간&nbsp;:&nbsp;${formatRegDate}<br>
 											<input style="width:500px; margin-bottom:5px; margin-top:5px; text-align:center;" type="text" value="${reviewlist.review_title}" disabled/><br>
 											<textarea style="width:500px; height:100px; margin-bottom:10px;" disabled>${reviewlist.review_content}</textarea><br>
-											<input style="margin-left:337px;" type="button" class="button" onclick="modifyReview()" id="modifyone" value="수정"/>
+											<input style="margin-left:337px;" type="button" class="button" onclick="modifyReview(this)" id="modifyone" value="수정"/>
 											<input type="button" class="button" onclick="deleteReview(this)" id="deleteone" value="삭제"/>
 											
 											<!-- hidden -->

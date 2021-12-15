@@ -56,6 +56,8 @@
 										</c:forEach>
 									</div>
 							</div>
+							
+							
 							<!--탭 콘텐츠 영역 -->
 						</div>
 					</div>
@@ -123,9 +125,10 @@ function tab2(){
  }
 
 /* 리뷰 수정 */
-function modifyReview(){
+function modifyReview(element){
 	var user_no = localStorage.getItem("user_no");
-	var review_no = $('#review_no').val();
+	var review_no = $(element).siblings('#review_no').val();
+	alert(review_no);
 	location.href='/test/modifyReview.do?user_no='+ user_no +'&review_no=' + review_no;
 }
  
