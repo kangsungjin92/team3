@@ -105,6 +105,8 @@ $(document).ready(function(){
     //저장 버튼 클릭 시
     $("#addReview").submit(function(){
     	var user_no = localStorage.getItem("user_no");
+    	alert(user_no);
+    	alert("hello");
     		if($('#boardWriteTitle').val() == ""){
     			alert("제목을 입력해주세요");
     			return false;

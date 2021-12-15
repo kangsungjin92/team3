@@ -150,7 +150,7 @@ $(document).ready(function(){
 				success:function(data){
 					if(data == 1){
 						alert("수정이 되었습니다.");
-						location.href="/test/getReviewList.do?user_no="+user_no;
+						location.href="/test/getReviewproductList.do?user_no="+user_no;
 					}
 				},
 				error:function(){
