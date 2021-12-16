@@ -27,37 +27,41 @@ public class ProductController {
 	@Autowired 
 	private ProductServiceImpl productserviceimpl;
 	
-	// 하위 카테고리 기준 상품 조회
+	/*하위 카테고리 기준 상품 조회*/
 	@RequestMapping("/getProduct.do")
 	public ModelAndView getProduct(HttpSession session, HttpServletRequest req, @RequestParam(value="pageNum", defaultValue="1") int pageNum) {
-		//return value & 파라미터 vo 생성
+		
 		ModelAndView mav = new ModelAndView();
 		HashMap<Object, Object> vo = new HashMap<Object, Object>();
 		
-		// 페이징 설정
+		/* 페이징 처리 */
 		productCriteria cri = new productCriteria();
-		cri.setPage(pageNum);	// 현재페이지
-		cri.setPageStart(); 	// startRow 설정 ( 현재페이지를 넘기면 시작 줄 계산)
+		cri.setPage(pageNum);	
+		cri.setPageStart(); 	
+		
 		System.out.println("페이지당 개수 :" + cri.getPerPageNum());
 		System.out.println("페이지 시작 :" + cri.getStartRow());
+		
 		productPageMaker pageMaker = new productPageMaker();
 		pageMaker.setCri(cri);
 		
-		/////////////////////회원//////////////////////////
+		/* 회원 */
 		if(!session.getAttribute("userNO").equals("0")) {
 			System.out.println("회원");
 			System.out.println(session.getAttribute("userNO"));
-			// 파라미터 vo 셋팅
-			vo.put("user_no", session.getAttribute("userNO")); // 회원 번호
-			vo.put("Selected", session.getAttribute("Selected")); //선택한 카테고리
+			
+			/* 파라미터 vo 셋팅 */
+			vo.put("user_no", session.getAttribute("userNO")); 
+			vo.put("Selected", session.getAttribute("Selected")); 
 			Category_detailVo cate = (Category_detailVo) vo.get("Selected");
 			System.out.println("선택한 값 :" +cate.getCategory_name() + "," + cate.getDetailed_category_name());
-			vo.put("perPageNum", cri.getPerPageNum()); 	// 페이지당 게시물 갯수
-			vo.put("startRow", cri.getStartRow());  	// 시작 번호
+			vo.put("perPageNum", cri.getPerPageNum()); 
+			vo.put("startRow", cri.getStartRow());  
+			
 			List<Category_detailVo> cateList = (List<Category_detailVo>) session.getAttribute("Category");
 			pageMaker.setTotalCount(productserviceimpl.getCountProductDetail(vo)); // 총 게시물 갯수
 			System.out.println("총 게시물 수: " + pageMaker.getTotalCount());
-
+			
 			mav.addObject("check", "bottom");
 			mav.addObject("pageNum", pageNum);
 			mav.addObject("pageMaker", pageMaker);
@@ -67,33 +71,32 @@ public class ProductController {
 			mav.setViewName("ProductView");
 		}
 		
-		/////////////////////////비회원//////////////////////////
+		/* 비회원 */
 		else {
 			System.out.println("비회원");
 			
-			// 파라미터 vo 셋팅
-			vo.put("user_no", session.getAttribute("userNO"));	// 동일 메서드 사용을 위해 비회원일 경우 0 셋팅
+			/* 파라미터 vo 셋팅 */
+			vo.put("user_no", session.getAttribute("userNO"));	
 			vo.put("Selected", session.getAttribute("Selected"));
 			Category_detailVo cate = (Category_detailVo) session.getAttribute("Selected");
 			System.out.println("선택한 값 :" +cate.getCategory_name() + "," + cate.getDetailed_category_name());
+			
 			List<Category_detailVo> cateList = (List<Category_detailVo>) session.getAttribute("Category");
 			vo.put("perPageNum", cri.getPerPageNum());
 			vo.put("startRow", cri.getStartRow());
+			
 			pageMaker.setTotalCount(productserviceimpl.getCountProductDetail(vo)); // 총 게시물 갯수
 			System.out.println("총 게시물 수: " + pageMaker.getTotalCount());
 			
-			// 쿠키 값 확인 및 상품 list mav에 추가
+			/* 쿠키 값 확인 */
 			List<ProductVo> productValue = productserviceimpl.getProductListByDetailedCategory(vo);
 			Cookie cookies[] = req.getCookies(); // 쿠키 리스트 얻기
 			String[] p_no = null;				 // 상품 번호 리스트
 			
-			//쿠키값 확인
 			for(Cookie c : cookies) {
 				if(c.getName().equals("p_list")) {
-					System.out.println("쿠키체크");
 					String value = c.getValue();
 					if(value == "") {
-						System.out.println(" 빈문자열");
 						 p_no = null;
 					}else {
 						p_no = value.split("%2F");
@@ -101,9 +104,9 @@ public class ProductController {
 				}
 			}
 			
-			// 위의 p_no 값과 상품번호 같으면, wish no 1(T)로 수정(T/F)
+			/* 위의 p_no 값과 상품번호 같으면, wish no 1(T)로 수정(T/F) */
 			if(!ArrayUtils.isEmpty(p_no)) {
-				for(int i =0; i < productValue.size(); i++) {
+				for(int i = 0; i < productValue.size(); i++) {
 					for(String p : p_no) {
 						if(p == ""){
 							continue;
@@ -125,14 +128,14 @@ public class ProductController {
 		return mav;
 	}
 	
-	// 상위 카테고리 기준 전체 상품 조회
+	/* 상위 카테고리 기준 전체 상품 조회 */
 	@RequestMapping("/getProductAll.do")
 	public ModelAndView getProductByDetail(HttpSession session,  HttpServletRequest req, @RequestParam(value="pageNum", defaultValue="1") int pageNum) {
-		// return 값 & 파라미터 vo 생성
+		
 		HashMap<Object, Object> vo = new HashMap<Object, Object>();
 		ModelAndView mav = new ModelAndView();
 		
-		// 페이징 설정
+		/* 페이징 설정 */
 		productCriteria cri = new productCriteria();
 		cri.setPage(pageNum);
 		cri.setPageStart();
@@ -141,12 +144,13 @@ public class ProductController {
 		
 		productPageMaker pageMaker = new productPageMaker();
 		pageMaker.setCri(cri);
-		/////////////////////////회원//////////////////////////
+
+		/* 회원 */
 		if(!session.getAttribute("userNO").equals("0")) {
 			System.out.println("회원-상위카테");
 			System.out.println(session.getAttribute("userNO"));
 			
-			// 파라미터 vo 셋팅
+			/* 파라미터 vo 셋팅 */
 			vo.put("user_no", session.getAttribute("userNO"));
 			vo.put("Selected", session.getAttribute("Selected"));
 			Category_detailVo cate = (Category_detailVo) vo.get("Selected");
@@ -156,17 +160,16 @@ public class ProductController {
 			pageMaker.setTotalCount(productserviceimpl.getCountProduct(vo));
 			System.out.println("총게시물수: " + pageMaker.getTotalCount());
 			
-			// 리턴 값 셋팅
 			mav.addObject("check", "top");
 			mav.addObject("pageNum", pageNum);
 			mav.addObject("pageMaker", pageMaker);
 			mav.addObject("Product", productserviceimpl.getProductListByCategory(vo)); // 선택 카테고리 기준 상품 & wishlist
 			mav.setViewName("ProductView");
 		}else {
-			/////////////////////////비회원//////////////////////////
+			/* 비회원 */
 			System.out.println("비회원-상위카테");
 			
-			//파라미터 vo 셋팅
+			/* 파라미터 vo 셋팅 */
 			vo.put("user_no", session.getAttribute("userNO"));
 			vo.put("Selected", session.getAttribute("Selected"));
 			vo.put("perPageNum", cri.getPerPageNum());
@@ -174,21 +177,19 @@ public class ProductController {
 			Category_detailVo cate = (Category_detailVo) vo.get("Selected");
 			System.out.println("상위 카테고리 값 : " + cate.getCategory_name());
 			List<Category_detailVo> cateList = (List<Category_detailVo>) session.getAttribute("Category");
+			
 			pageMaker.setTotalCount(productserviceimpl.getCountProduct(vo)); // 총 게시물 갯수
 			System.out.println("총 게시물 수: " + pageMaker.getTotalCount());
 			
-			// 쿠키 값 확인 및 상품 list mav에 추가
+			/* 쿠키값 확인 */
 			List<ProductVo> productValue = productserviceimpl.getProductListByCategory(vo);
 			Cookie cookies[] = req.getCookies();
 			String[] p_no = null;
 			
-			//쿠키값 확인
 			for(Cookie c : cookies) {
 				if(c.getName().equals("p_list")) {
-					System.out.println("쿠키체크");
 					String value = c.getValue();
 					if(value == "") {
-						System.out.println(" 빈문자열");
 						 p_no = null;
 					}else {
 						p_no = value.split("%2F");
@@ -196,7 +197,6 @@ public class ProductController {
 				}
 			}
 			
-			// 쿠키 값 == 상품번호 wish no 수정 
 			if(!ArrayUtils.isEmpty(p_no)) {
 				for(int i =0; i < productValue.size(); i++) {
 					for(String p : p_no) {
@@ -211,7 +211,7 @@ public class ProductController {
 					}
 				}
 			}
-			// 리턴값 설정
+			
 			mav.addObject("check", "top");
 			mav.addObject("pageNum", pageNum);
 			mav.addObject("pageMaker", pageMaker);
@@ -224,13 +224,13 @@ public class ProductController {
 	}
 
 	
-	//////////// 회원 wish//////////////
+	/* wishlist */
 	@RequestMapping("/getWishList.do")
 	public ModelAndView getProductListBywishList(@RequestParam(value="user_no", required=false) String user_no, HttpServletRequest req, HttpServletResponse repo) {
 		System.out.println("위시리스트 가져오기");
 		System.out.println(user_no);
 		ModelAndView mav = new ModelAndView();
-		// 리턴값 셋팅
+		
 		if( user_no != null) {
 			mav.addObject("wishList", productserviceimpl.getProductListBywishList(user_no));
 			mav.setViewName("wish");
@@ -241,20 +241,18 @@ public class ProductController {
 			String[] p_no = null;
 			List<ProductVo> productValue = new ArrayList<ProductVo>();
 			
-			// 쿠키 값 확인 
+			/* 쿠키값 확인 */
 			for(Cookie c : cookies) {
 				if(c.getName().equals("p_list")) {
-					System.out.println("쿠키체크");
 					String value = c.getValue();
 					if(value == "") {
-						System.out.println(" 빈문자열");
 						 p_no = null;
 					}else {
 						p_no = value.split("%2F");
 					}
 				}
 			}
-			// 쿠키 값 == 상품번호 wish no 수정 
+			
 			if(!ArrayUtils.isEmpty(p_no)) {
 				for(int i =0; i < product.size(); i++) {
 					for(String p : p_no) {
@@ -269,6 +267,7 @@ public class ProductController {
 					}
 				}
 			}
+			
 			mav.addObject("wishList", productValue);
 			mav.setViewName("wish");
 		}
@@ -323,13 +322,11 @@ public class ProductController {
 			Cookie cookies[] = req.getCookies();
 			String[] p_no = null;
 			
-			//쿠키값 확인
+			/* 쿠키값 확인 */
 			for(Cookie c : cookies) {
 				if(c.getName().equals("p_list")) {
-					System.out.println("쿠키체크");
 					String value = c.getValue();
 					if(value == "") {
-						System.out.println(" 빈문자열");
 						 p_no = null;
 					}else {
 						p_no = value.split("%2F");
@@ -337,7 +334,6 @@ public class ProductController {
 				}
 			}
 			
-			// 쿠키 값 == 상품번호 wish no 수정 
 			if(!ArrayUtils.isEmpty(p_no)) {
 				for(int i =0; i < productValue.size(); i++) {
 					for(String p : p_no) {

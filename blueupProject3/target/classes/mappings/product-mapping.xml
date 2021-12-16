@@ -41,6 +41,7 @@
 		DETAILED_CATEGORY_NAME = #{detailed_category_name}
 		WHERE PRODUCT_NO = #{product_no}
 	</update>
+	
 	<!-- 메인 화면 캡볼 상품 조회 -->
 	<select id="getProductMain" resultType="productvo">
 		SELECT * FROM PRODUCT WHERE DETAILED_CATEGORY_NAME = '볼캡' ORDER BY PRODUCT_NO LIMIT 12

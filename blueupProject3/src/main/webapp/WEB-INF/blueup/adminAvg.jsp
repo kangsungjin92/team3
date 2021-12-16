@@ -101,8 +101,8 @@
 									    width:900,
 						                height:500,
 								        vAxis: {
-								        	  0 : {minValue:0, logScale: false},
-								        	  1 : {minValue:0, maxValue:100, logScale: false}
+								        	  0 : {minValue:0},
+								        	  1 : {minValue:0, maxValue:100}
 								        },
 								        hAxis: {title: 'day', maxValue:31, minValue:1},
 								        seriesType: 'bars',

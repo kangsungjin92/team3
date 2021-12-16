@@ -37,12 +37,12 @@ public class ProductDetailController {
 		System.out.println("회원 상품상세");
 		ModelAndView mav = new ModelAndView();
 		
-		// 상품 vo 셋팅
+		/* 상품 vo 셋팅 */
 		ProductDetailVo vo_p = new ProductDetailVo();
 		vo_p.setProduct_no(Integer.parseInt(product_no));
 		vo_p.setUser_no(Integer.parseInt(user_no)); 
 		
-		// 리뷰 vo 셋팅 및 페이징, 값 설정
+		/* 리뷰 vo 셋팅 및 페이징, 값 설정 */
 		HashMap<String, Object> vo = new HashMap<String, Object>();
 			ReviewCriteria cri = new ReviewCriteria();
 			cri.setPage(page_no);	// 현재페이지
@@ -53,9 +53,8 @@ public class ProductDetailController {
 			ReviewPageMaker pageMaker = new ReviewPageMaker();
 			pageMaker.setCri(cri);
 			
-			/*별점 기준 조회인지 아닌지 구분*/
 			List<ReviewVo> reviewList = new ArrayList<ReviewVo>();
-			System.out.println(star);
+			
 			/*일반 조회*/
 			System.out.println("일반조회");
 			vo.put("perPageNum", cri.getPerPageNum()); 	// 페이지당 게시물 갯수
@@ -104,10 +103,10 @@ public class ProductDetailController {
 		
 		
 		/*비회원 위시리스트 적용 */
-		Cookie cookies[] = req.getCookies(); // 쿠키 리스트 얻기
-		String[] p_no = null;				 // 상품 번호 리스트
+		Cookie cookies[] = req.getCookies(); 
+		String[] p_no = null;				 
 		
-		//쿠키값 null check 및 배열에 넣기
+		/* 쿠키값 null check 및 배열에 넣기 */
 		for(Cookie c : cookies) {
 			if(c.getName().equals("p_list")) {
 				System.out.println("쿠키체크");
@@ -121,7 +120,6 @@ public class ProductDetailController {
 			}
 		}
 		
-		// 위의 p_no 값과 상품번호 같으면, wish no 1(T)로 수정(T/F)
 		if(!ArrayUtils.isEmpty(p_no)) {
 			for(int i =0; i < p_no.length; i++) {
 					if(product_no.equals(p_no[i])){
@@ -132,23 +130,23 @@ public class ProductDetailController {
 			}
 		}
 		
-		// 리뷰 vo 셋팅 및 페이징, 값 설정
+		/* 리뷰 vo 셋팅 및 페이징, 값 설정 */
 		HashMap<String, Object> hash = new HashMap<String, Object>();
 			ReviewCriteria cri = new ReviewCriteria();
-			cri.setPage(page_no);	// 현재페이지
-			cri.setPageStart(); 	// startRow 설정 ( 현재페이지를 넘기면 시작 줄 계산)
+			cri.setPage(page_no);	
+			cri.setPageStart(); 	
 			System.out.println("페이지당 개수 :" + cri.getPerPageNum());
 			System.out.println("페이지 시작 :" + cri.getStartRow());
 			
 			ReviewPageMaker pageMaker = new ReviewPageMaker();
 			pageMaker.setCri(cri);
 			
-			/*별점 기준 조회인지 아닌지 구분*/
 			List<ReviewVo> reviewList = new ArrayList<ReviewVo>();
+			
 			/*일반 조회*/
 			System.out.println("일반조회");
-			hash.put("perPageNum", cri.getPerPageNum()); 	// 페이지당 게시물 갯수
-			hash.put("startRow", cri.getStartRow());  	// 시작 번호
+			hash.put("perPageNum", cri.getPerPageNum()); 	
+			hash.put("startRow", cri.getStartRow());  
 			hash.put("product", Integer.parseInt(product_no));
 				
 			pageMaker.setTotalCount(productDetailServiceimpl.reviewCount(Integer.parseInt(product_no)));
@@ -164,7 +162,7 @@ public class ProductDetailController {
 					mav.addObject("review", reviewList);
 				}
 			
-			// color, size list 따로 받기
+			/* color, size list 따로 받기 */
 			List<ProductDetailVo> p =  productDetailServiceimpl.selectProductDetailNonMember(vo);
 			System.out.println(vo.getProduct_no());
 			String[] color = p.get(0).getProduct_color().split("/");
@@ -192,10 +190,8 @@ public class ProductDetailController {
 		int result = 0;
 		System.out.println("비회원 주문이동");
 			if(vo != null) {
-				System.out.println(vo.getProduct_color());
 				List<CartVo> list = new ArrayList<CartVo>();
 				list.add(vo);
-				System.out.println("add");
 				session.setAttribute("orderNonMember", list);
 				result = 1; 
 			}
@@ -211,10 +207,8 @@ public class ProductDetailController {
 		int result = 0;
 		System.out.println("회원 주문이동");
 			if(vo != null) {
-				System.out.println(vo.getProduct_color());
 				List<CartVo> list = new ArrayList<CartVo>();
 				list.add(vo);
-				System.out.println(vo.getUser_no());
 				session.setAttribute("order", list);
 				result = 1; 
 			}
@@ -226,7 +220,8 @@ public class ProductDetailController {
 	@ResponseBody
 	public ModelAndView selectReivew(@RequestParam(value="product_no") String product_no, @RequestParam(value="page_no", defaultValue="1") int page_no,
 			@RequestParam(value="star", required = false) String star) {
-	// 리뷰 vo 셋팅 및 페이징, 값 설정
+		
+	/* 리뷰 vo 셋팅 및 페이징, 값 설정 */
 		if(star == null || star.equals("null")) {
 				System.out.println("노별점");
 				HashMap<String, Object> hash = new HashMap<String, Object>();
@@ -234,8 +229,8 @@ public class ProductDetailController {
 				List<ReviewVo> reviewList = new ArrayList<ReviewVo>();
 				ModelAndView mav = new ModelAndView();
 				
-				cri.setPage(page_no);	// 현재페이지
-				cri.setPageStart(); 	// startRow 설정 ( 현재페이지를 넘기면 시작 줄 계산)
+				cri.setPage(page_no);	
+				cri.setPageStart(); 	
 				System.out.println("페이지당 개수 :" + cri.getPerPageNum());
 				System.out.println("페이지 시작 :" + cri.getStartRow());
 				
@@ -263,14 +258,15 @@ public class ProductDetailController {
 				mav.setViewName("Reviewhtml");
 				return mav;
 		}else {
+			
 			/*별점 기준 조회*/
 			HashMap<String, Object> hash = new HashMap<String, Object>();
 			ReviewCriteria cri = new ReviewCriteria();
 			List<ReviewVo> reviewList = new ArrayList<ReviewVo>();
 			ModelAndView mav = new ModelAndView();
 			
-			cri.setPage(page_no);	// 현재페이지
-			cri.setPageStart(); 	// startRow 설정 ( 현재페이지를 넘기면 시작 줄 계산)
+			cri.setPage(page_no);	
+			cri.setPageStart(); 	
 			System.out.println("페이지당 개수 :" + cri.getPerPageNum());
 			System.out.println("페이지 시작 :" + cri.getStartRow());
 			
@@ -278,8 +274,8 @@ public class ProductDetailController {
 			pageMaker.setCri(cri);
 			
 			System.out.println("일반조회");
-			hash.put("perPageNum", cri.getPerPageNum()); 	// 페이지당 게시물 갯수
-			hash.put("startRow", cri.getStartRow());  	// 시작 번호
+			hash.put("perPageNum", cri.getPerPageNum()); 	
+			hash.put("startRow", cri.getStartRow());  	
 			hash.put("product", Integer.parseInt(product_no));
 			hash.put("star", star);
 			System.out.println("페이지" + cri.getPerPageNum());
